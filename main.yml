@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: yes
+
+  #  vars:
+  #  ansible_network_os: RedHat
+
+  tasks:
+
+  - name: centos 7 postinstall | Set LOCALE
+    blockinfile:
+      path: /etc/environment
+      create: yes
+      block: |
+        LANG=en_US.utf-8
+        LC_ALL=en_US.utf-8
