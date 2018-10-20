@@ -18,7 +18,7 @@
   - name: passwd unexpire | select user
     user:
       name: "{{ awx_prompted_user }}"
-      expires: "{{ '%Y-%m-%d' | strftime( ( ansible_date_time.epoch | int ) + ( 86400 * 180 )  ) }}"
+      expires: "{{ calculated_expiry_date }}"
 
       # ansible_date_time.epoch
       # +180 days is 1540015733 sec
