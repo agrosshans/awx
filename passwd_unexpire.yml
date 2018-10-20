@@ -19,7 +19,7 @@
   - name: get password hash
     shell: 'grep "{{ awx_prompted_user }}" /etc/shadow | cut -d\: -f2'
     register: password_hash
-    when: user_exists.rc == "0"
+    when: user_exists == true
 
   - name: passwd unexpire | Add +180 days
     debug:
@@ -34,7 +34,7 @@
       name: "{{ awx_prompted_user }}"
       password: "{{ password_hash }}"
       update_password: always
-    when: user_exits.rc == 0
+    when: user_exists == true
       #expires: "{{ ansible_date_time.epoch | int + ( 86400 * 180 ) }}"
 
       # chage -d 2018-02-11 user1 (for testing purpose - set an already expired password)
