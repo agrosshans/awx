@@ -1,0 +1,36 @@
+---
+
+- hosts: all
+  become: true
+  become_user: root
+  become_method: sudo
+
+  #  vars:
+  #  ansible_network_os: RedHat
+
+  tasks:
+
+  - name: Ansible date timestamp example
+    debug:
+      now=ansible_date_time.epoch
+
+  - name: Add +180 days
+    debug:
+      msg: "{{ '%Y-%m-%d' | strftime( ( ansible_date_time.epoch | int ) + ( 86400 * 180 )  ) }}"
+    register: calculated_expiry_date
+
+  - name: passwd unexpire | select user
+    user:
+      name: "{{ awx_prompted_user }}"
+      expires: "{{ '%Y-%m-%d' | strftime( ( ansible_date_time.epoch | int ) + ( 86400 * 180 )  ) }}"
+
+      # ansible_date_time.epoch
+      # +180 days is 1540015733 sec
+
+# Last password change          : Oct 20, 2018
+# Password expires          : never
+# Password inactive         : never
+# Account expires           : never
+# Minimum number of days between password change    : 0
+# Maximum number of days between password change    : 99999
+# Number of days of warning before password expires : 7
