@@ -11,5 +11,6 @@
   tasks:
 
   - name: passwd unlocking | select user
-    user: "{{ awx_prompted_user }}"
-    password_lock: no # passwd --unlock user1
+    user:
+      name: "{{ awx_prompted_user }}"
+      password_lock: no # passwd --unlock user1
