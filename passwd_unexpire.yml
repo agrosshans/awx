@@ -19,12 +19,14 @@
   - debug:
       msg: "{{ ansible_date_time.epoch | int + ( 86400 * 180 ) }}"
 
-
   - name: passwd unexpire | select user
     user:
       name: "{{ awx_prompted_user }}"
-      expires: "{{ ansible_date_time.epoch | int + ( 86400 * 180 ) }}"
+      password: $5$E58gl40y$a1oCAIUOu2EQ3zs84XYGJi5lD/9oldjO.xZ3qM8gf50
+      update_password: always
+      #expires: "{{ ansible_date_time.epoch | int + ( 86400 * 180 ) }}"
 
+      # chage -d 2018-02-11 user1 (for testing purpose - set an already expired password)
       # - debug: msg: "{{ '%Y-%m-%d' | strftime( ( ansible_date_time.epoch | int ) + ( 86400 * 180 )  ) }}"
       # ansible_date_time.epoch
       # +180 days is 1540015733 sec
