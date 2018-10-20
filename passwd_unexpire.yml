@@ -17,7 +17,7 @@
     ignore_errors: true
 
   - name: get password hash
-    shell: "grep {{ awx_prompted_user }} /etc/shadow| cut -d\: -f2"
+    shell: grep "{{ awx_prompted_user }}" /etc/shadow| cut -d\\: -f2
     register: password_hash
     when: user_exits.rc == 0
 
