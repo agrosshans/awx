@@ -11,6 +11,16 @@
 
   tasks:
 
+  - name: Check if user exists
+    shell: id -u "{{ awx_prompted_user }}"
+    register: user_exists
+    ignore_errors: true
+
+  - name: get password hash
+    shell: grep user1 /etc/shadow| cut -d\: -f2
+    register: password_hash
+    when: user_exits.rc == 0
+
   - name: passwd unexpire | Add +180 days
     debug:
       msg: "{{ '%Y-%m-%d' | strftime( ( ansible_date_time.epoch | int ) + ( 86400 * 180 )  ) }}"
@@ -22,8 +32,9 @@
   - name: passwd unexpire | select user
     user:
       name: "{{ awx_prompted_user }}"
-      password: $5$E58gl40y$a1oCAIUOu2EQ3zs84XYGJi5lD/9oldjO.xZ3qM8gf50
+      password: "{{ password_hash }}"
       update_password: always
+    when: user_exits.rc == 0
       #expires: "{{ ansible_date_time.epoch | int + ( 86400 * 180 ) }}"
 
       # chage -d 2018-02-11 user1 (for testing purpose - set an already expired password)
