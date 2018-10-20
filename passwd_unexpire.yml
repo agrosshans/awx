@@ -16,6 +16,10 @@
       msg: "{{ '%Y-%m-%d' | strftime( ( ansible_date_time.epoch | int ) + ( 86400 * 180 )  ) }}"
     register: calculated_expiry_date
 
+  - debug:
+      msg: "{{ '%Y-%m-%d' | strftime( ( ansible_date_time.epoch | int ) + ( 86400 * 180 )  ) }}"
+
+
   - name: passwd unexpire | select user
     user:
       name: "{{ awx_prompted_user }}"
