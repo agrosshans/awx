@@ -17,7 +17,7 @@
     ignore_errors: true
 
   - debug:
-      msg: user_exists.rc
+      msg: "does user exists?: " {{ user_exists.rc }}
 
   - name: get password hash
     shell: 'grep {{ awx_prompted_user }} /etc/shadow | cut -d\: -f2'
