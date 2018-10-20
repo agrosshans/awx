@@ -11,7 +11,7 @@
 
   tasks:
 
-  - name: Add +180 days
+  - name: passwd unexpire | Add +180 days
     debug:
       msg: "{{ '%Y-%m-%d' | strftime( ( ansible_date_time.epoch | int ) + ( 86400 * 180 )  ) }}"
     register: calculated_expiry_date
@@ -19,7 +19,7 @@
   - name: passwd unexpire | select user
     user:
       name: "{{ awx_prompted_user }}"
-      expires: {{ calculated_expiry_date | strftime(ansible_date_time.epoch) }}
+      expires: "{{ calculated_expiry_date | strftime(ansible_date_time.epoch) }}"
 
       # - debug: msg: "{{ '%Y-%m-%d' | strftime( ( ansible_date_time.epoch | int ) + ( 86400 * 180 )  ) }}"
       # ansible_date_time.epoch
