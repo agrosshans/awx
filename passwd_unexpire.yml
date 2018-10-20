@@ -10,10 +10,6 @@
 
   tasks:
 
-  - name: Ansible date timestamp example
-    debug:
-      now=ansible_date_time.epoch
-
   - name: Add +180 days
     debug:
       msg: "{{ '%Y-%m-%d' | strftime( ( ansible_date_time.epoch | int ) + ( 86400 * 180 )  ) }}"
@@ -26,6 +22,10 @@
 
       # ansible_date_time.epoch
       # +180 days is 1540015733 sec
+
+# chage -l user1
+# passwd --expire user1
+# chage -l user1
 
 # Last password change          : Oct 20, 2018
 # Password expires          : never
