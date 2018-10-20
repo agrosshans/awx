@@ -12,12 +12,12 @@
   tasks:
 
   - name: Check if user exists
-    shell: id -u "{{ awx_prompted_user }}"
+    shell: id -u {{ awx_prompted_user }}
     register: user_exists
     ignore_errors: true
 
   - name: get password hash
-    shell: 'grep "{{ awx_prompted_user }}" /etc/shadow | cut -d\: -f2'
+    shell: 'grep {{ awx_prompted_user }} /etc/shadow | cut -d\: -f2'
     register: password_hash
     when: user_exists == true
 
