@@ -13,7 +13,7 @@
 
   - name: extend_fs | get fs info
     debug:
-      msg: {{ hostvars[host]['ansible_mounts']['mount']['"{{ awx_prompted_fs }}"'] }}
+      msg: "{{ hostvars[ansible_host]['ansible_mounts']['mount']['"{{ awx_prompted_fs }}"'] }}""
 
   # - name: extend_fs | Check if filesystem exists
   #   shell: /sbin/lvs "{{ awx_prompted_fs }}" 
