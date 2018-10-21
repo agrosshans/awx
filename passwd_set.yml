@@ -32,6 +32,7 @@
     user:
       name: "{{ awx_prompted_user }}"
       password: "{{ awx_password_hash }}"
+      expires: "{{ calculated_expiry_date }}"
       update_password: always
     when: user_exists.rc == 0
       #expires: "{{ ansible_date_time.epoch | int + ( 86400 * 180 ) }}"
