@@ -8,28 +8,49 @@
 
   vars:
 
-  # awx_prompted_fs: /boot
+    #awx_prompted_fs: /var/log
+    #awx_prompted_size: 1
 
   tasks:
 
   - name: extend_fs | get fs mount
     shell: /bin/mount | grep "{{ awx_prompted_fs }} "
-    #/dev/mapper/rootvg-var on /var type xfs (rw,relatime,seclabel,attr2,inode64,noquota)
+    #/dev/mapper/rootvg-varlog on /var/log type xfs (rw,relatime,seclabel,attr2,inode64,noquota)
     register: fs_mount
 
   - name: extend_fs | get fs device
     debug:
-      msg: "fs device name is: {{ fs_mount.stdout.split()[0] }}"
+      msg: "{{ fs_mount.stdout.split()[0] }}"
     register: awx_prompted_fs_device
 
-  - name: extend_fs | get fs type
+  - name: extend_fs | get current lv size
+    shell: /sbin/lvdisplay -C /dev/"{{ fs_mount.stdout.split('-')[0].split('/')[3] }}"/"{{ fs_mount.stdout.split()[0].split('/')[3].split('-')[1] }}" | tail -1
+    #   varlog rootvg -wi-ao---- 4.00g 
+    register: lv_size
+
+  - name: extend_fs | get lv name
     debug:
-      msg: "fs type is: {{ fs_mount.stdout.split()[4] }}"
-    register: awx_prompted_fs_type
+      msg: "{{ fs_mount.stdout.split()[0].split('/')[3].split('-')[1] }}"
+
+  - name: extend_fs | get vg name
+    debug:
+      msg: "{{ fs_mount.stdout.split('-')[0].split('/')[3] }}"
+
+  - set_fact: ansible_lvsize={{lv_size.stdout.split()[3].split('.')[0]|int}}
+  - set_fact: ansible_lvresize={{(lv_size.stdout.split()[3].split('.')[0]|int)+(awx_prompted_size)}}
+
+  - name: extend fs | get ansible_lvsize
+    debug:
+      msg: "ansible_lvsize: {{ ansible_lvsize }}"
+
+  - name: extend fs | get ansible_lvresize
+    debug:
+      msg: "ansible_lvresize: {{ ansible_lvresize }}"
 
   - name: extend_fs | grow filesystem
     lvol:
-      lv: "{{ awx_prompted_fs }}"
-      size: "{{ awx_prompted_size }}"
+      lv: "{{ fs_mount.stdout.split()[0].split('/')[3].split('-')[1] }}"
+      vg: "{{ fs_mount.stdout.split('-')[0].split('/')[3] }}"
+      size: "{{ ansible_lvresize }}g"
       shrink: no
       resizefs: yes
