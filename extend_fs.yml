@@ -1,0 +1,68 @@
+---
+
+- hosts: all
+  become: true
+  become_user: root
+  become_method: sudo
+  gather_facts: true
+
+  #  vars:
+  #  ansible_network_os: RedHat
+
+  tasks:
+
+  - name: extend_fs | get fs info
+    debug:
+      msg: {{ hostvars[host]['ansible_mounts']['mount']['awx_prompted_fs'] }}
+
+  # - name: extend_fs | Check if filesystem exists
+  #   shell: /sbin/lvs "{{ awx_prompted_fs }}" 
+  #   register: filesystem_exists
+  #   ignore_errors: true
+
+  # - debug:
+  #     msg: "does filesystem exists?: {{ filesystem_exists.rc }}"
+
+
+  # - name: extend_fs | Grow filesystem
+  #   lvol:
+  #     vg: "{{ awx_prompted_vg }}"
+  #     lv: "{{ awx_prompted_fs }}"
+  #     size: "{{ awx_prompted_size }}"
+  #     shrink: no
+  #     resizefs: yes
+
+
+          # "ansible_mounts": [
+          #   {
+          #       "block_available": 2318328, 
+          #       "block_size": 4096, 
+          #       "block_total": 2618880, 
+          #       "block_used": 300552, 
+          #       "device": "/dev/mapper/rootvg-root", 
+          #       "fstype": "xfs", 
+          #       "inode_available": 5202790, 
+          #       "inode_total": 5242880, 
+          #       "inode_used": 40090, 
+          #       "mount": "/", 
+          #       "options": "rw,seclabel,relatime,attr2,inode64,noquota", 
+          #       "size_available": 9495871488, 
+          #       "size_total": 10726932480, 
+          #       "uuid": "39c32055-de3d-470a-a69c-b902bb6154c0"
+          #   }, 
+          #   {
+          #       "block_available": 983330, 
+          #       "block_size": 4096, 
+          #       "block_total": 1046016, 
+          #       "block_used": 62686, 
+          #       "device": "/dev/mapper/rootvg-var", 
+          #       "fstype": "xfs", 
+          #       "inode_available": 2095135, 
+          #       "inode_total": 2097152, 
+          #       "inode_used": 2017, 
+          #       "mount": "/var", 
+          #       "options": "rw,seclabel,relatime,attr2,inode64,noquota", 
+          #       "size_available": 4027719680, 
+          #       "size_total": 4284481536, 
+          #       "uuid": "39302d93-3e33-4f9b-bda7-48067da34865"
+          #   },
