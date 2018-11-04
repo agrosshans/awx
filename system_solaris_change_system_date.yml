@@ -1,6 +1,6 @@
 ---
 
-- hosts: localhost.localdomain
+- hosts: localhost
 
   tasks:
 
